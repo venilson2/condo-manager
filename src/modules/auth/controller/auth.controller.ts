@@ -8,7 +8,7 @@ class AuthController {
       const token = await AuthService.authenticateUser(username, password);
 
       if (token) {
-        res.status(200).json({ token });
+        res.status(200).json({ username, token });
       } else {
         res.status(401).send('Invalid credentials');
       }
