@@ -35,6 +35,16 @@ class UserService {
   async getUserByUsername(username: string): Promise<User | null> {
     return await UserRepository.getUserByUsername(username);
   }
+
+  async getUserLogged(token: string): Promise<User | null> {
+    try {
+      const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET as string);
+      return await UserRepository.getUserById(decodedToken.userId);
+    } catch (error: any) {
+      console.error('Error verifying token:', error.message);
+      return null; 
+    }
+  }
 }
 
 export default new UserService();

@@ -68,6 +68,28 @@ class UserController {
       res.status(500).send('Error deleting the User.');
     }
   }
+
+  async getUserLogged(req: Request, res: Response): Promise<void> {
+    try {
+      const token = req.header('Authorization')?.split(' ')[1];
+
+      if (!token) {
+        res.status(401).send('Unauthorized');
+        return;
+      }
+
+      const loggedInUser = await UserService.getUserLogged(token);
+
+      if (loggedInUser) {
+        res.status(200).json(loggedInUser);
+      } else {
+        res.status(401).send('Unauthorized - Invalid or expired token');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error getting the logged-in user.');
+    }
+  }
 }
 
 export default new UserController();
